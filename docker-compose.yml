@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+    web:
+        build: .
+        container_name: php_app
+        ports:
+            - "8080:80"
+        volumes:
+            - .:/var/www/html
+        depends_on:
+            - cron
+
+    cron:
+        image: php:8.2-cli
+        container_name: php_cron
+        volumes:
+            - .:/var/www/html
+        command: >
+            bash -c "while true; do php /var/www/html/repos.php;
+            sleep 600; done"
